@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+  Tela: Cadastro de Paciente/Dentista
+  Observações:
+  - A visibilidade dos campos de Dentista (CRO/Especialidade) é controlada no controller
+    via binding com chkDentista.selectedProperty().
+  - O botão "Salvar" tem fx:id para permitir trocar para "Atualizar" em modo edição.
+  - A TableView tem placeholder quando não há dados.
+-->
+
+<BorderPane xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.PacienteController">
+
+    <center>
+        <VBox spacing="12">
+            <padding>
+                <Insets top="12" right="12" bottom="12" left="12"/>
+            </padding>
+
+            <!-- ================== FORMULÁRIO ================== -->
+            <GridPane hgap="10" vgap="10">
+                <!-- 1ª coluna: labels alinhados à direita / largura mínima -->
+                <columnConstraints>
+                    <ColumnConstraints minWidth="140" halignment="RIGHT"/>
+                    <ColumnConstraints hgrow="ALWAYS"/>
+                </columnConstraints>
+
+                <children>
+                    <!-- Nome (obrigatório) -->
+                    <Label text="Nome:*" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                        <tooltip>
+                            <Tooltip text="Informe o nome completo."/>
+                        </tooltip>
+                    </Label>
+                    <TextField fx:id="txtNome"
+                               promptText="Nome completo"
+                               GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                    <!-- CPF (somente números; 11 dígitos) -->
+                    <Label text="CPF:*" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                        <tooltip>
+                            <Tooltip text="Apenas números (11 dígitos)."/>
+                        </tooltip>
+                    </Label>
+                    <TextField fx:id="txtCpf"
+                               promptText="Somente números"
+                               GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                    <!-- Telefone -->
+                    <Label text="Telefone:" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                        <tooltip>
+                            <Tooltip text="Apenas números. Ex.: DDD + número."/>
+                        </tooltip>
+                    </Label>
+                    <TextField fx:id="txtTelefone"
+                               promptText="DDD + número"
+                               GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                    <!-- Email -->
+                    <Label text="Email:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                    <TextField fx:id="txtEmail"
+                               promptText="exemplo@dominio.com"
+                               GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+                    <!-- Data de Nascimento -->
+                    <Label text="Data Nascimento:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                    <DatePicker fx:id="dpNascimento"
+                                GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+                    <!-- É Dentista? (controla CRO/Especialidade) -->
+                    <Label text="É Dentista?" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+                    <CheckBox fx:id="chkDentista" text="Sim"
+                              GridPane.columnIndex="1" GridPane.rowIndex="5">
+                        <tooltip>
+                            <Tooltip text="Marque para preencher CRO e Especialidade."/>
+                        </tooltip>
+                    </CheckBox>
+
+                    <!-- Campos do Dentista (o controller mostra/oculta) -->
+                    <Label fx:id="lblCro" text="CRO:" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+                    <TextField fx:id="txtCro"
+                               promptText="Número do CRO"
+                               GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+
+                    <Label fx:id="lblEsp" text="Especialidade:" GridPane.columnIndex="0" GridPane.rowIndex="7"/>
+                    <TextField fx:id="txtEspecialidade"
+                               promptText="Especialidade"
+                               GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+                </children>
+            </GridPane>
+
+            <!-- ================== BOTÕES DA AÇÃO ================== -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <!-- fx:id permite trocar texto para 'Atualizar' quando editar -->
+                <Button fx:id="btnSalvar"
+                        text="Salvar"
+                        onAction="#onSalvar"
+                        defaultButton="true"/>
+                <Button text="Limpar" onAction="#onLimpar" cancelButton="true"/>
+                <Button text="Listar" onAction="#onListar"/>
+                <!-- dica visual dos obrigatórios -->
+                <Label text="* campos obrigatórios"
+                       style="-fx-text-fill: #666; -fx-font-size: 11;"/>
+            </HBox>
+
+            <!-- ================== TABELA ================== -->
+            <TableView fx:id="tabela" prefHeight="260" editable="false">
+                <placeholder>
+                    <Label text="Nenhum registro encontrado."/>
+                </placeholder>
+                <columns>
+                    <!-- As PropertyValueFactory são configuradas no controller -->
+                    <TableColumn fx:id="colNome" prefWidth="240" text="Nome"/>
+                    <TableColumn fx:id="colCpf"  prefWidth="140" text="CPF"/>
+                    <TableColumn fx:id="colTel"  prefWidth="150" text="Telefone"/>
+                    <TableColumn fx:id="colNasc" prefWidth="140" text="Nascimento"/>
+                    <!-- Coluna de ações (Editar/Excluir) é um cellFactory no controller -->
+                    <TableColumn fx:id="colAcoes" prefWidth="180" text="Ações"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+</BorderPane>

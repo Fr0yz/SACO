@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.MainController">
+
+    <top>
+        <VBox>
+            <MenuBar>
+                <Menu text="Cadastros">
+                    <MenuItem text="Pacientes" onAction="#navPacientes" accelerator="Shortcut+1"/>
+                    <MenuItem text="Anamnese" onAction="#navAnamnese" accelerator="Shortcut+2"/>
+                    <MenuItem text="Material" onAction="#navMaterial" accelerator="Shortcut+3"/>
+
+                </Menu>
+
+                <Menu text="Sistema">
+                    <MenuItem text="Sair" onAction="#navSair"/>
+                </Menu>
+            </MenuBar>
+
+            <!-- Título dinâmico / breadcrumb opcional -->
+            <Label fx:id="lblTitulo"
+                   style="-fx-padding: 8 12; -fx-font-size: 16; -fx-font-weight: bold;"
+                   text="Início"/>
+        </VBox>
+    </top>
+
+    <center>
+        <!-- Onde as páginas serão carregadas -->
+        <StackPane fx:id="contentPane">
+            <!-- Pode começar vazio; o controller carrega a tela inicial -->
+        </StackPane>
+    </center>
+
+    <bottom>
+        <Label style="-fx-padding: 6 12; -fx-text-fill: #666;"
+               text="© Odontologia Avançada"/>
+    </bottom>
+</BorderPane>

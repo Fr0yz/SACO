@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.MaterialController">
+
+    <!-- ======= BARRA SUPERIOR: FORM E AÇÕES ======= -->
+    <top>
+        <VBox spacing="8">
+            <padding>
+                <Insets top="12" right="12" bottom="12" left="12"/>
+            </padding>
+
+            <!-- Linha do formulário -->
+            <HBox spacing="8" alignment="CENTER_LEFT">
+                <Label text="ID:"/>
+                <TextField fx:id="txtId" prefWidth="90" editable="false"/>
+
+                <Label text="Nome:*"/>
+                <TextField fx:id="txtNome" promptText="Nome do material" HBox.hgrow="ALWAYS"/>
+
+                <Label text="Quantidade:"/>
+                <TextField fx:id="txtQuantidade" promptText="0" prefWidth="90"/>
+            </HBox>
+
+            <!-- Linha de botões e filtro -->
+            <HBox spacing="8" alignment="CENTER_LEFT">
+                <Button fx:id="btnNovo" text="Novo" onAction="#onNovo"/>
+                <Button fx:id="btnSalvar" text="Salvar" onAction="#onSalvar" defaultButton="true"/>
+                <Button fx:id="btnExcluir" text="Excluir" onAction="#onExcluir"/>
+
+                <Separator orientation="VERTICAL"/>
+
+                <Button fx:id="btnMais1" text="+1" onAction="#onMais1"/>
+                <Button fx:id="btnMenos1" text="-1" onAction="#onMenos1"/>
+                <Button fx:id="btnDefinirQtde" text="Definir Qtde" onAction="#onDefinirQtde"/>
+
+                <Pane HBox.hgrow="ALWAYS"/>
+                <Label text="Filtrar:"/>
+                <TextField fx:id="txtFiltro" promptText="Buscar por nome..." prefWidth="240"/>
+
+                <Label text="* campos obrigatórios"
+                       style="-fx-text-fill: #666; -fx-font-size: 11;"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- ======= CENTRO: TABELA ======= -->
+    <center>
+        <TableView fx:id="tabela" prefHeight="360" editable="false">
+            <placeholder>
+                <Label text="Nenhum material encontrado."/>
+            </placeholder>
+            <columns>
+                <TableColumn fx:id="colId"          prefWidth="80"  text="ID"/>
+                <TableColumn fx:id="colNome"        prefWidth="360" text="Nome"/>
+                <TableColumn fx:id="colQuantidade"  prefWidth="140" text="Quantidade"/>
+                <TableColumn fx:id="colAcoes"       prefWidth="200" text="Ações"/>
+            </columns>
+        </TableView>
+    </center>
+</BorderPane>

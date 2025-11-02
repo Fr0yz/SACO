@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.AnamneseController">
+
+    <center>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+
+            <!-- ================== FORMULÁRIO ================== -->
+            <GridPane hgap="10" vgap="10">
+                <columnConstraints>
+                    <ColumnConstraints minWidth="160" halignment="RIGHT"/>
+                    <ColumnConstraints hgrow="ALWAYS"/>
+                </columnConstraints>
+
+                <children>
+                    <!-- Paciente -->
+                    <Label text="Paciente:" GridPane.rowIndex="0"/>
+                    <ComboBox fx:id="cbPaciente"
+                              promptText="Selecione um paciente"
+                              onAction="#onPacienteSelecionado"
+                              prefWidth="520"
+                              GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                    <!-- Alergias -->
+                    <Label text="Alergias:" GridPane.rowIndex="1"/>
+                    <TextArea fx:id="txtAlergias"
+                              prefRowCount="3"
+                              wrapText="true"
+                              GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                    <!-- Histórico Médico -->
+                    <Label text="Histórico Médico:" GridPane.rowIndex="2"/>
+                    <TextArea fx:id="txtHistorico"
+                              prefRowCount="3"
+                              wrapText="true"
+                              GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                    <!-- Medicamentos -->
+                    <Label text="Medicamentos:" GridPane.rowIndex="3"/>
+                    <TextArea fx:id="txtMedicamentos"
+                              prefRowCount="3"
+                              wrapText="true"
+                              GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+                    <!-- Detalhes -->
+                    <Label text="Detalhes:" GridPane.rowIndex="4"/>
+                    <TextArea fx:id="txtDetalhes"
+                              prefRowCount="3"
+                              wrapText="true"
+                              GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+                    <!-- Odontograma -->
+                    <Label text="Cadastrar Odontograma:" GridPane.rowIndex="5"/>
+                    <CheckBox fx:id="chkOdontoGrama"
+                              text="Sim"
+                              GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+
+                    <Label fx:id="lblOdontoGrama"
+                           text="Imagem:"
+                           GridPane.rowIndex="6"/>
+                    <VBox spacing="6" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                        <ImageView fx:id="imgOdonto"
+                                   fitWidth="520" fitHeight="200"
+                                   preserveRatio="true" smooth="true" pickOnBounds="true"/>
+                        <HBox spacing="8">
+                            <Button text="Carregar imagem" onAction="#onCarregarImagem"/>
+                            <Button text="Remover imagem"  onAction="#onRemoverImagem"/>
+                            <Button text="Remover imagem " onAction="#onRemoverImagemBD"/>
+                        </HBox>
+                    </VBox>
+                </children>
+            </GridPane>
+
+            <!-- ================== AÇÕES ================== -->
+            <HBox spacing="10">
+                <Button text="Salvar"  onAction="#onSalvar"/>
+                <Button text="Limpar"  onAction="#onLimpar"/>
+                <Button text="Listar"  onAction="#onListar"/>
+                <Button text="Excluir (Paciente)" onAction="#onExcluirPacienteAnamnese"/>
+
+            </HBox>
+
+            <!-- ================== TABELA DE ANAMNESES ================== -->
+            <TableView fx:id="tabela" prefHeight="280" editable="false">
+                <placeholder>
+                    <Label text="Nenhuma anamnese encontrada."/>
+                </placeholder>
+                <columns>
+                    <TableColumn fx:id="colData"   prefWidth="140" text="Data"/>
+                    <TableColumn fx:id="colAlerg"  prefWidth="180" text="Alergias"/>
+                    <TableColumn fx:id="colHist"   prefWidth="180" text="Histórico Médico"/>
+                    <TableColumn fx:id="colMed"    prefWidth="180" text="Medicamentos"/>
+                    <TableColumn fx:id="colDet"    prefWidth="220" text="Detalhes"/>
+                    <TableColumn fx:id="colImg"    prefWidth="90"  text="Imagem?"/>
+                    <TableColumn fx:id="colAcoes"  prefWidth="160" text="Ações"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+</BorderPane>
