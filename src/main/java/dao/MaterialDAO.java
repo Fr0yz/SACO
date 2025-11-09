@@ -28,55 +28,22 @@ public class MaterialDAO {
     }
 
     public long inserirMaterial(Material material) throws SQLException {
-        final String sql = "INSERT INTO TB_MATERIAL (NOME, QUANTIDADE) VALUES (?, ?)";
+        String sql = "INSERT INTO TB_MATERIAL (NOME, QUANTIDADE) VALUES (?, ?)";
 
-        Connection conn = Conexao.getConnection();
-        Long generatedId = null;
+        try (Connection conn = Conexao.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-        try {
-            conn.setAutoCommit(false);
+            ps.setString(1, material.getNOME());
+            ps.setInt(2, material.getQUANTIDADE());
 
-            try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-                ps.setString(1, material.getNOME());
-                ps.setInt(2, material.getQUANTIDADE());
-
-                int affected = ps.executeUpdate();
-                if (affected == 0) {
-                    throw new SQLException("Nenhuma linha inserida em TB_MATERIAL.");
-                }
-
-                try (ResultSet keys = ps.getGeneratedKeys()) {
-                    if (!keys.next()) {
-                        throw new SQLException("Falha ao obter chave gerada de TB_MATERIAL.");
-                    }
-                    generatedId = keys.getLong(1);
-                }
+            if (ps.executeUpdate() == 0) {
+                throw new SQLException("Nenhuma linha inserida em TB_MATERIAL.");
             }
 
-            conn.commit();
-            return generatedId;
-
-        } catch (SQLException ex) {
-            if (conn != null) {
-                try {
-                    conn.rollback();
-                } catch (SQLException rbEx) {
-                    ex.addSuppressed(rbEx);
-                }
-            }
-            throw ex;
-        } finally {
-            if (conn != null) {
-                try {
-                    conn.setAutoCommit(true);
-                } catch (SQLException ignore) {
-                }
-                try {
-                    conn.close();
-                } catch (SQLException ignore) {
-                }
-            }
+        } catch (SQLException e) {
+            throw new SQLException("Erro ao inserir material: " + e.getMessage(), e);
         }
+        return 0;
     }
 
     public void excluirMaterial(int materialID) throws SQLException {
@@ -105,7 +72,7 @@ public class MaterialDAO {
 
             ps.setString(1, m.getNOME());
             ps.setInt(2, m.getQUANTIDADE());
-            ps.setInt(3, m.getID()); // <--- faltava
+            ps.setInt(3, m.getID());
 
             int linhas = ps.executeUpdate();
             if (linhas == 0) {

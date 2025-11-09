@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.TratamentoController">
+
+    <!-- ========= TOPO: Formulário ========= -->
+    <top>
+        <VBox spacing="8.0" BorderPane.alignment="CENTER">
+            <children>
+                <Label text="Cadastro de Tratamento"/>
+                <GridPane hgap="8.0" vgap="8.0">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="20"/>
+                        <ColumnConstraints percentWidth="80"/>
+                    </columnConstraints>
+
+                    <!-- ID (somente leitura) -->
+                    <Label text="ID:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                    <TextField fx:id="txtId" editable="false" promptText="(gerado automaticamente)"
+                               GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                    <!-- Nome -->
+                    <Label text="Nome:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                    <TextField fx:id="txtNome" promptText="Ex.: Limpeza"
+                               GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                    <!-- Descrição -->
+                    <Label text="Descrição:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                    <TextArea fx:id="txtDescricao" promptText="Detalhes"
+                              prefRowCount="2"
+                              GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                </GridPane>
+
+                <!-- Botões principais -->
+                <HBox spacing="8.0">
+                    <children>
+                        <Button text="Novo"    onAction="#onNovo"/>
+                        <Button text="Salvar"  onAction="#onSalvar" defaultButton="true"/>
+                        <Button text="Excluir" onAction="#onExcluir"/>
+                    </children>
+                </HBox>
+            </children>
+            <padding>
+                <Insets top="12" right="12" bottom="12" left="12"/>
+            </padding>
+        </VBox>
+    </top>
+
+    <!-- ========= CENTRO: Split Tabela de Tratamentos x Consumo ========= -->
+    <center>
+        <SplitPane dividerPositions="0.5">
+            <items>
+
+                <!-- ESQUERDA: Tabela de Tratamentos -->
+                <VBox spacing="6.0">
+                    <children>
+                        <Label text="Tratamentos"/>
+                        <TableView fx:id="tblTratamentos" prefHeight="320.0" onMouseClicked="#onSelecionarTratamento">
+                            <columns>
+                                <TableColumn fx:id="colId"        text="ID"        prefWidth="80.0"/>
+                                <TableColumn fx:id="colNome"      text="Nome"      prefWidth="160.0"/>
+                                <TableColumn fx:id="colDescricao"  text="Descrição" prefWidth="240.0"/>
+                            </columns>
+                        </TableView>
+                        <Button text="Recarregar" onAction="#carregarTabela"/>
+                    </children>
+                    <padding><Insets top="0" right="12" bottom="12" left="12"/></padding>
+                </VBox>
+
+                <!-- DIREITA: Consumo de Materiais (com quantidade) -->
+                <VBox spacing="6.0">
+                    <children>
+                        <Label text="Materiais do Tratamento"/>
+
+                        <!-- Tabela de consumo: Material x Quantidade -->
+                        <TableView fx:id="tblMateriaisVinculados" prefHeight="280.0" editable="true">
+                            <columns>
+                                <TableColumn fx:id="colMatNome" text="Material"   prefWidth="240.0"/>
+                                <TableColumn fx:id="colMatQtd"  text="Quantidade" prefWidth="120.0"/>
+                            </columns>
+                        </TableView>
+
+                        <!-- Linha de inclusão: Combo + Spinner + Adicionar/Remover -->
+                        <HBox spacing="6.0">
+                            <children>
+                                <ComboBox fx:id="cmbMateriaisDisponiveis" prefWidth="240.0" promptText="Selecionar material"/>
+                                <Spinner fx:id="spQuantidade" prefWidth="120.0"/>
+                                <Button text="Adicionar" onAction="#onAdicionarMaterial"/>
+                                <Button text="Remover"   onAction="#onRemoverMaterial"/>
+                            </children>
+                        </HBox>
+                    </children>
+                    <padding><Insets top="0" right="12" bottom="12" left="0"/></padding>
+                </VBox>
+
+            </items>
+        </SplitPane>
+    </center>
+
+    <!-- ========= RODAPÉ: status ========= -->
+    <bottom>
+        <HBox>
+            <children>
+                <Label fx:id="lblStatus" text="Pronto."/>
+            </children>
+            <padding><Insets top="6" right="12" bottom="12" left="12"/></padding>
+        </HBox>
+    </bottom>
+
+</BorderPane>

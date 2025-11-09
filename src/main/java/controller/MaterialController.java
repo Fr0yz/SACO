@@ -140,27 +140,38 @@ public class MaterialController {
 
     @FXML
     public void onSalvar() {
-        String nome = txtNome.getText() == null ? "" : txtNome.getText().trim();
-        String qStr = txtQuantidade.getText() == null ? "" : txtQuantidade.getText().trim();
-
-        Integer qtd = (qStr.isBlank() ? 0 : Integer.valueOf(qStr));
+        String nome = safeTrim(txtNome.getText());
+        String idStr = safeTrim(txtId.getText());
+        String qStr  = safeTrim(txtQuantidade.getText());
 
         try {
-            if (txtId.getText() == null || txtId.getText().isBlank()) {
+            Integer qtd = parseIntOrZero(qStr);
+
+            if (idStr.isBlank()) {
                 // Criar
                 long id = service.criar(nome, qtd);
                 alertInfo("Material criado (ID=" + id + ").");
             } else {
                 // Atualizar
+                Integer id = parseIntOrNull(idStr);
+                if (id == null) {
+                    alertErro("ID inválido.");
+                    return;
+                }
                 Material m = new Material();
-                m.setID(Integer.valueOf(txtId.getText()));
+                m.setID(id);
                 m.setNOME(nome);
                 m.setQUANTIDADE(qtd);
+
                 service.atualizar(m);
                 alertInfo("Material atualizado.");
             }
+
             carregarTabela();
             onNovo();
+
+        } catch (NumberFormatException nfe) {
+            alertErro("Quantidade inválida. Informe um número inteiro.");
         } catch (ServiceException ex) {
             alertErro(ex.getMessage());
         } catch (Exception ex) {
@@ -168,6 +179,24 @@ public class MaterialController {
             ex.printStackTrace();
         }
     }
+
+    private static String safeTrim(String s) {
+        return (s == null) ? "" : s.trim();
+    }
+
+    private static Integer parseIntOrZero(String s) {
+        if (s == null || s.isBlank()) return 0;
+        return Integer.valueOf(s); // pode lançar NumberFormatException — tratado acima
+    }
+
+    private static Integer parseIntOrNull(String s) {
+        try {
+            return (s == null || s.isBlank()) ? null : Integer.valueOf(s);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
 
     @FXML
     public void onExcluir() {

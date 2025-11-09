@@ -14,6 +14,7 @@
                     <MenuItem text="Pacientes" onAction="#navPacientes" accelerator="Shortcut+1"/>
                     <MenuItem text="Anamnese" onAction="#navAnamnese" accelerator="Shortcut+2"/>
                     <MenuItem text="Material" onAction="#navMaterial" accelerator="Shortcut+3"/>
+                    <MenuItem text="Tratamento" onAction="#navTratamento" accelerator="Shortcut+4"/>
 
                 </Menu>
 

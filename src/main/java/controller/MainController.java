@@ -40,6 +40,10 @@ public class MainController {
     private void navMaterial() {
         loadView("/Material.fxml", "Cadastro de Material");
     }
+    @FXML
+    private void navTratamento() {
+        loadView("/Tratamento.fxml", "Cadastro de Tratamento");
+    }
 
 
     @FXML

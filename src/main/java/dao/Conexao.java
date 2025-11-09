@@ -12,4 +12,13 @@ public class Conexao {
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASSWORD);
     }
+
+    /** Retorna o nome do driver JDBC (MySQL, PostgreSQL, etc.) */
+    public static String getDriverName() {
+        try (Connection conn = getConnection()) {
+            return conn.getMetaData().getDriverName();
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao obter nome do driver JDBC", e);
+        }
+    }
 }

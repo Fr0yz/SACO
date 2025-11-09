@@ -1,8 +1,6 @@
 package model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,8 +11,22 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "tb_material")
 public class Material {
+
     @Id
-    public Integer  ID;
-    public String NOME;
-    public Integer  QUANTIDADE;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_material")
+    private Integer ID;
+
+    @Column(name = "nome")
+    private String NOME;
+
+    @Column(name = "quantidade")
+    private Integer QUANTIDADE;
+
+    /**
+     * Quantidade consumida em um tratamento.
+     * Campo não mapeado para o banco (apenas uso temporário na aplicação).
+     */
+    @Transient
+    private Integer qtdConsumo;
 }
