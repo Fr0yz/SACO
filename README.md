@@ -7,6 +7,7 @@ Aplicação desktop JavaFX para gestão básica de pacientes e fluxo clínico (p
 ---
 
 ## Visão geral
+- Documentação detalhada do projeto: [`docs/DOCUMENTACAO.md`](docs/DOCUMENTACAO.md).
 - Interface construída com JavaFX e FXML (`src/main/resources/*.fxml`).
 - Tela principal carrega `Main.fxml` a partir da classe de entrada `Main`.
 - Camadas básicas:
