@@ -6,6 +6,57 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CadastroPessoaDao {
+
+    public List<Dentista> listarDentista() throws SQLException {
+        List<Dentista> lista = new ArrayList<>();
+
+        String sql = """
+        SELECT de.ID_DENTISTA, pe.NOME
+        FROM TB_DENTISTA de
+        INNER JOIN TB_PESSOA pe ON de.ID_DENTISTA = pe.ID_PESSOA
+        ORDER BY pe.NOME
+        """;
+
+        try (Connection conn = Conexao.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Dentista d = new Dentista();
+                d.setId_dentista(rs.getInt("ID_DENTISTA"));
+                d.setNome(rs.getString("NOME"));
+                lista.add(d);
+            }
+        }
+
+        return lista;
+    }
+
+    public List<Pessoa> listarPacientes() throws SQLException {
+        List<Pessoa> lista = new ArrayList<>();
+
+        String sql = """
+        SELECT pa.ID_PACIENTE, pe.NOME
+        FROM TB_PACIENTE pa
+        INNER JOIN TB_PESSOA pe ON pa.ID_PACIENTE = pe.ID_PESSOA
+        ORDER BY pe.NOME
+        """;
+
+        try (Connection conn = Conexao.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Pessoa p = new Pessoa();
+                p.setId_pessoa(rs.getInt("ID_PACIENTE"));
+                p.setNome(rs.getString("NOME"));
+                lista.add(p);
+            }
+        }
+
+        return lista;
+    }
+
     Integer id_pessoa = null;
 
     public Integer ultimocadastro() throws SQLException {
@@ -43,30 +94,7 @@ public class CadastroPessoaDao {
         return lista;
     }
 
-    public List<Pessoa> listarPacientes() throws SQLException {
-        List<Pessoa> lista = new ArrayList<>();
 
-        String sql = """
-        SELECT pa.ID_PACIENTE, pe.NOME
-        FROM TB_PACIENTE pa
-        INNER JOIN TB_PESSOA pe ON pa.ID_PACIENTE = pe.ID_PESSOA
-        ORDER BY pe.NOME
-        """;
-
-        try (Connection conn = Conexao.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-
-            while (rs.next()) {
-                Pessoa p = new Pessoa();
-                p.setId_pessoa(rs.getInt("ID_PACIENTE"));
-                p.setNome(rs.getString("NOME"));
-                lista.add(p);
-            }
-        }
-
-        return lista;
-    }
 
     public long inserirPessoa(Pessoa pessoa, Dentista dentista) throws SQLException {
         final String sqlPessoa   = "INSERT INTO TB_PESSOA (NOME, CPF, TELEFONE, EMAIL, DT_NASCIMENTO) VALUES (?,?,?,?,?)";
@@ -254,5 +282,6 @@ public class CadastroPessoaDao {
             try { conn.close(); } catch (SQLException ignore) {}
         }
     }
+
 
 }

@@ -25,9 +25,7 @@ public class MaterialController {
     @FXML private Button btnNovo;
     @FXML private Button btnSalvar;
     @FXML private Button btnExcluir;
-    @FXML private Button btnMais1;
-    @FXML private Button btnMenos1;
-    @FXML private Button btnDefinirQtde;
+
 
     // ====== UI: Tabela ======
     @FXML private TextField txtFiltro;
@@ -113,9 +111,6 @@ public class MaterialController {
         btnExcluir.disableProperty().bind(
                 Bindings.createBooleanBinding(() -> txtId.getText() == null || txtId.getText().isBlank())
         );
-        btnMais1.disableProperty().bind(btnExcluir.disableProperty());
-        btnMenos1.disableProperty().bind(btnExcluir.disableProperty());
-        btnDefinirQtde.disableProperty().bind(btnExcluir.disableProperty());
     }
 
     private void configurarAtalhos() {

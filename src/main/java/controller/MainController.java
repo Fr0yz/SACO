@@ -44,6 +44,10 @@ public class MainController {
     private void navTratamento() {
         loadView("/Tratamento.fxml", "Cadastro de Tratamento");
     }
+    @FXML
+    private void navAgendamento() {
+        loadView("/Agendamento.fxml", "Cadastro de Agendamento");
+    }
 
 
     @FXML

@@ -35,10 +35,6 @@
 
                 <Separator orientation="VERTICAL"/>
 
-                <Button fx:id="btnMais1" text="+1" onAction="#onMais1"/>
-                <Button fx:id="btnMenos1" text="-1" onAction="#onMenos1"/>
-                <Button fx:id="btnDefinirQtde" text="Definir Qtde" onAction="#onDefinirQtde"/>
-
                 <Pane HBox.hgrow="ALWAYS"/>
                 <Label text="Filtrar:"/>
                 <TextField fx:id="txtFiltro" promptText="Buscar por nome..." prefWidth="240"/>

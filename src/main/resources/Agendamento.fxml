@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controller.AgendamentoController">
+
+    <center>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+
+            <!-- Formulário -->
+            <TitledPane text="Formulário de Agendamento" expanded="true">
+                <content>
+                    <GridPane hgap="10" vgap="10">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="18"/>
+                            <ColumnConstraints percentWidth="32"/>
+                            <ColumnConstraints percentWidth="18"/>
+                            <ColumnConstraints percentWidth="32"/>
+                        </columnConstraints>
+
+                        <!-- Linha 0 -->
+                        <Label text="ID:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                        <TextField fx:id="txtId" editable="false" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                        <Label text="Paciente:" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+                        <ComboBox fx:id="cbPaciente" promptText="Selecione..." GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+
+                        <!-- Linha 1 -->
+                        <Label text="Dentista:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                        <ComboBox fx:id="cbDentista" promptText="Selecione..." GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                        <Label text="Tratamento:" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+                        <ComboBox fx:id="cbTratamento" promptText="Selecione..." GridPane.rowIndex="1" GridPane.columnIndex="3"/>
+
+                        <!-- Linha 2 -->
+                        <Label text="Data:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                        <DatePicker fx:id="dpData" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                        <Label text="Hora (HH:mm):" GridPane.rowIndex="2" GridPane.columnIndex="2"/>
+                        <TextField fx:id="txtHora" promptText="14:30" GridPane.rowIndex="2" GridPane.columnIndex="3"/>
+
+                        <!-- Linha 3 -->
+                        <Label text="Status:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                        <ComboBox fx:id="cbStatus" promptText="Selecione..." GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+                        <Label text="Observações:" GridPane.rowIndex="3" GridPane.columnIndex="2"/>
+                        <TextArea fx:id="txtObs" prefRowCount="2" GridPane.rowIndex="3" GridPane.columnIndex="3"/>
+                    </GridPane>
+                </content>
+            </TitledPane>
+
+            <ToolBar>
+                <Button fx:id="btnNovo"       text="Novo"        onAction="#onNovo"/>
+                <Button fx:id="btnSalvar"     text="Salvar"      onAction="#onSalvar"/>
+                <Button fx:id="btnAtualizar"  text="Atualizar"   onAction="#onAtualizar"/>
+                <Button fx:id="btnExcluir"    text="Excluir"     onAction="#onExcluir"/>
+                <Button fx:id="btnRecarregar" text="Recarregar"  onAction="#onRecarregar"/>
+                <Button fx:id="btnLimpar"     text="Limpar"      onAction="#onLimpar"/>
+            </ToolBar>
+
+            <!-- Tabela -->
+            <TableView fx:id="tabela" prefHeight="420">
+                <columns>
+                    <TableColumn fx:id="colId"         text="ID"          prefWidth="70"/>
+                    <TableColumn fx:id="colPaciente"   text="Paciente"    prefWidth="160"/>
+                    <TableColumn fx:id="colDentista"   text="Dentista"    prefWidth="160"/>
+                    <TableColumn fx:id="colTratamento" text="Tratamento"  prefWidth="180"/>
+                    <TableColumn fx:id="colDataHora"   text="Data/Hora"   prefWidth="150"/>
+                    <TableColumn fx:id="colStatus"     text="Status"      prefWidth="120"/>
+                    <TableColumn fx:id="colObs"        text="Observações" prefWidth="280"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+</BorderPane>

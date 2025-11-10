@@ -14,4 +14,5 @@ public class Dentista {
     public int id_dentista;
     public String cro;
     public String especialidade;
+    public String nome;
 }
