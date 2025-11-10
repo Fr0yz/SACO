@@ -16,6 +16,7 @@
                     <MenuItem text="Material" onAction="#navMaterial" accelerator="Shortcut+3"/>
                     <MenuItem text="Tratamento" onAction="#navTratamento" accelerator="Shortcut+4"/>
                     <MenuItem text="Agendamento" onAction="#navAgendamento" accelerator="Shortcut+5"/>
+                    <MenuItem text="Financeiro" onAction="#navFinanceiro" accelerator="Shortcut+6"/>
 
                 </Menu>
 

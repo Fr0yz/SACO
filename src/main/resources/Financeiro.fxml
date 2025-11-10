@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="controller.FinanceiroController">
+
+    <!-- Header -->
+    <top>
+        <HBox spacing="12" styleClass="toolbar-primary">
+            <padding><Insets top="12" right="16" bottom="12" left="16"/></padding>
+            <Label text="Financeiro" styleClass="title"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Button fx:id="btnFinNovo"       text="Novo"        onAction="#onFinNovo"/>
+            <Button fx:id="btnFinEmitir"     text="Emitir"      onAction="#onFinEmitir"/>
+            <Button fx:id="btnFinAtualizar"  text="Atualizar"   onAction="#onFinAtualizar"/>
+            <Button fx:id="btnFinCancelar"   text="Cancelar"    onAction="#onFinCancelar"/>
+            <Button fx:id="btnFinRecarregar" text="Recarregar"  onAction="#onFinRecarregar"/>
+            <Button fx:id="btnFinLimpar"     text="Limpar"      onAction="#onFinLimpar"/>
+        </HBox>
+    </top>
+
+    <center>
+        <SplitPane orientation="VERTICAL" dividerPositions="0.48">
+            <!-- Lista de títulos -->
+            <VBox spacing="10">
+                <padding><Insets top="12" right="16" bottom="0" left="16"/></padding>
+
+                <TableView fx:id="tblFinanceiro" prefHeight="280">
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                    </columnResizePolicy>
+                    <columns>
+                        <TableColumn fx:id="colFinId"          text="ID" minWidth="80"/>
+                        <TableColumn fx:id="colFinAgendamento" text="Agendamento" minWidth="120"/>
+                        <TableColumn fx:id="colFinValor"       text="Valor Total" minWidth="120"/>
+                        <TableColumn fx:id="colFinEmissao"     text="Emissão" minWidth="160"/>
+                        <TableColumn fx:id="colFinStatus"      text="Status" minWidth="120"/>
+                        <TableColumn fx:id="colFinMetodo"      text="Método" minWidth="120"/>
+                    </columns>
+                </TableView>
+            </VBox>
+
+            <!-- Detalhes e pagamentos -->
+            <VBox spacing="12">
+                <padding><Insets top="0" right="16" bottom="16" left="16"/></padding>
+
+                <HBox spacing="12">
+                    <!-- Card: Título Financeiro -->
+                    <VBox spacing="8" styleClass="card" HBox.hgrow="ALWAYS">
+                        <padding><Insets top="12" right="12" bottom="12" left="12"/></padding>
+                        <Label text="Detalhes do título" styleClass="card-title"/>
+
+                        <GridPane hgap="10" vgap="10">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="18"/>
+                                <ColumnConstraints percentWidth="32"/>
+                                <ColumnConstraints percentWidth="18"/>
+                                <ColumnConstraints percentWidth="32"/>
+                            </columnConstraints>
+
+                            <Label text="ID:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                            <TextField fx:id="txtFinId" editable="false" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                            <Label text="Agendamento ID:" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+                            <TextField fx:id="txtFinAgendamento" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+
+                            <Label text="Valor Total:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                            <TextField fx:id="txtFinValor" promptText="0,00" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                            <Label text="Data de Emissão:" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+                            <HBox spacing="8" GridPane.rowIndex="1" GridPane.columnIndex="3">
+                                <DatePicker fx:id="dpFinEmissao"/>
+                                <TextField fx:id="txtFinHora" promptText="HH:mm" maxWidth="80"/>
+                            </HBox>
+
+                            <Label text="Método:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                            <ComboBox fx:id="cbFinMetodo" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                            <Label text="Status:" GridPane.rowIndex="2" GridPane.columnIndex="2"/>
+                            <ComboBox fx:id="cbFinStatus" GridPane.rowIndex="2" GridPane.columnIndex="3"/>
+
+                            <!-- espaço para campo futuro -->
+                            <Label text="Observações:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                            <TextArea fx:id="txtFinObsFake" prefRowCount="2" GridPane.rowIndex="3" GridPane.columnIndex="1" GridPane.columnSpan="3"/>
+                        </GridPane>
+                    </VBox>
+                </HBox>
+
+                <!-- Card: Pagamentos -->
+                <VBox spacing="8" styleClass="card">
+                    <padding><Insets top="12" right="12" bottom="12" left="12"/></padding>
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                        <Label text="Pagamentos" styleClass="card-title"/>
+                        <Label text="•" styleClass="spacer-dot"/>
+                        <Label text="do título selecionado" styleClass="muted"/>
+                        <Pane HBox.hgrow="ALWAYS"/>
+                        <Button fx:id="btnPagRegistrar" text="Registrar" onAction="#onPagRegistrar"/>
+                        <Button fx:id="btnPagEstornar"  text="Estornar Selecionado" onAction="#onPagEstornar"/>
+                    </HBox>
+
+                    <GridPane hgap="10" vgap="10">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="18"/>
+                            <ColumnConstraints percentWidth="32"/>
+                            <ColumnConstraints percentWidth="18"/>
+                            <ColumnConstraints percentWidth="32"/>
+                        </columnConstraints>
+
+                        <Label text="Valor:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                        <TextField fx:id="txtPagValor" promptText="0,00" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                        <Label text="Data/Hora:" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+                        <HBox spacing="8" GridPane.rowIndex="0" GridPane.columnIndex="3">
+                            <DatePicker fx:id="dpPagData"/>
+                            <TextField fx:id="txtPagHora" promptText="HH:mm" maxWidth="80"/>
+                        </HBox>
+
+                        <Label text="Nº Fatura:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                        <TextField fx:id="txtPagFatura" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                        <Label text="Nº Boleto:" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+                        <TextField fx:id="txtPagBoleto" GridPane.rowIndex="1" GridPane.columnIndex="3"/>
+
+                        <Label text="Status:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                        <ComboBox fx:id="cbPagStatus" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                    </GridPane>
+
+                    <TableView fx:id="tblPagamentos" prefHeight="220">
+                        <columnResizePolicy>
+                            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                        </columnResizePolicy>
+                        <columns>
+                            <TableColumn fx:id="colPagId"     text="ID"        minWidth="80"/>
+                            <TableColumn fx:id="colPagValor"  text="Valor"     minWidth="120"/>
+                            <TableColumn fx:id="colPagData"   text="Data/Hora" minWidth="160"/>
+                            <TableColumn fx:id="colPagFatura" text="Nº Fatura" minWidth="140"/>
+                            <TableColumn fx:id="colPagBoleto" text="Nº Boleto" minWidth="140"/>
+                            <TableColumn fx:id="colPagStatus" text="Status"    minWidth="120"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+            </VBox>
+        </SplitPane>
+    </center>
+</BorderPane>

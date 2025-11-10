@@ -48,6 +48,10 @@ public class MainController {
     private void navAgendamento() {
         loadView("/Agendamento.fxml", "Cadastro de Agendamento");
     }
+    @FXML
+    private void navFinanceiro() {
+        loadView("/Financeiro.fxml", "Cadastro de Finanças");
+    }
 
 
     @FXML
