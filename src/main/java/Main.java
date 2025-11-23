@@ -1,4 +1,3 @@
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,16 +8,16 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Main.fxml"));
-        Parent root = loader.load();  // <-- use Parent
+        // LOGIN PRIMEIRO
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml")); // ou /view/Login.fxml
+        Parent root = loader.load();
 
-        Scene scene = new Scene(root, 1024, 640);
-        stage.setTitle("Odontologia Avançada");
+        Scene scene = new Scene(root, 600, 300);
+        stage.setTitle("Login - Odontologia Avançada");
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
     }
-
-
 
     public static void main(String[] args) {
         launch(args);

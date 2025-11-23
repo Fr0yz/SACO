@@ -25,37 +25,54 @@ import java.util.List;
 public class PacienteController {
 
     // ==========================
-    //  Componentes da UI (FXML)
+    // Componentes da UI (FXML)
     // ==========================
-    @FXML private Button btnSalvar;
+    @FXML
+    private Button btnSalvar;
 
-    @FXML private TextField txtNome;
-    @FXML private TextField txtCpf;
-    @FXML private TextField txtTelefone;
-    @FXML private TextField txtEmail;
-    @FXML private DatePicker dpNascimento;
+    @FXML
+    private TextField txtNome;
+    @FXML
+    private TextField txtCpf;
+    @FXML
+    private TextField txtTelefone;
+    @FXML
+    private TextField txtEmail;
+    @FXML
+    private DatePicker dpNascimento;
 
-    @FXML private CheckBox chkDentista;
-    @FXML private TextField txtCro;
-    @FXML private TextField txtEspecialidade;
-    @FXML private Label lblCro;
-    @FXML private Label lblEsp;
+    @FXML
+    private CheckBox chkDentista;
+    @FXML
+    private TextField txtCro;
+    @FXML
+    private TextField txtEspecialidade;
+    @FXML
+    private Label lblCro;
+    @FXML
+    private Label lblEsp;
 
-    @FXML private TableView<Pessoa> tabela;
-    @FXML private TableColumn<Pessoa, String> colNome;
-    @FXML private TableColumn<Pessoa, String> colCpf;
-    @FXML private TableColumn<Pessoa, String> colTel;
-    @FXML private TableColumn<Pessoa, Date>   colNasc;
-    @FXML private TableColumn<Pessoa, Void>   colAcoes;
+    @FXML
+    private TableView<Pessoa> tabela;
+    @FXML
+    private TableColumn<Pessoa, String> colNome;
+    @FXML
+    private TableColumn<Pessoa, String> colCpf;
+    @FXML
+    private TableColumn<Pessoa, String> colTel;
+    @FXML
+    private TableColumn<Pessoa, Date> colNasc;
+    @FXML
+    private TableColumn<Pessoa, Void> colAcoes;
 
     // ==========================
-    //  Estado e Serviço (camada de regras)
+    // Estado e Serviço (camada de regras)
     // ==========================
     private Pessoa pacienteEmEdicao = null;
     private final CadastroPessoaService service = new CadastroPessoaService();
 
     // ==========================
-    //  Ciclo de Vida (init)
+    // Ciclo de Vida (init)
     // ==========================
     @FXML
     public void initialize() {
@@ -68,12 +85,15 @@ public class PacienteController {
 
         // Se desmarcar "É Dentista?", limpa CRO/Especialidade
         chkDentista.selectedProperty().addListener((o, was, isNow) -> {
-            if (!isNow) { txtCro.clear(); txtEspecialidade.clear(); }
+            if (!isNow) {
+                txtCro.clear();
+                txtEspecialidade.clear();
+            }
         });
     }
 
     // =====================================================
-    //  Coluna de Ações (Editar/Excluir por registro)
+    // Coluna de Ações (Editar/Excluir por registro)
     // =====================================================
     private void addAcoesButtons() {
         colAcoes.setCellFactory(col -> new TableCell<>() {
@@ -84,12 +104,14 @@ public class PacienteController {
             {
                 btnEditar.setOnAction(e -> {
                     Pessoa p = getRowItem();
-                    if (p == null) return;
+                    if (p == null)
+                        return;
                     try {
                         Dentista d = service.buscarDentista(p.id_pessoa); // via Service
                         carregarNoFormulario(p, d);
                         pacienteEmEdicao = p;
-                        if (btnSalvar != null) btnSalvar.setText("Atualizar");
+                        if (btnSalvar != null)
+                            btnSalvar.setText("Atualizar");
                     } catch (SQLException ex) {
                         alertErro("Erro ao carregar dados do dentista: " + ex.getMessage());
                     }
@@ -97,7 +119,8 @@ public class PacienteController {
 
                 btnExcluir.setOnAction(e -> {
                     Pessoa p = getRowItem();
-                    if (p == null) return;
+                    if (p == null)
+                        return;
                     Alert conf = new Alert(Alert.AlertType.CONFIRMATION,
                             "Excluir o paciente \"" + p.getNome() + "\"?",
                             ButtonType.YES, ButtonType.NO);
@@ -116,7 +139,8 @@ public class PacienteController {
                 });
             }
 
-            @Override protected void updateItem(Void item, boolean empty) {
+            @Override
+            protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
                 setGraphic(empty ? null : box);
             }
@@ -128,7 +152,7 @@ public class PacienteController {
     }
 
     // ============================================
-    //  Preenchimento do formulário para EDIÇÃO
+    // Preenchimento do formulário para EDIÇÃO
     // ============================================
     private void carregarNoFormulario(Pessoa p, Dentista d) {
         txtNome.setText(p.getNome());
@@ -158,38 +182,50 @@ public class PacienteController {
     }
 
     // =====================================================
-    //  Ações (Salvar, Limpar, Listar)
+    // Ações (Salvar, Limpar, Listar)
     // =====================================================
     @FXML
     public void onSalvar() {
         try {
             // Validações mínimas
-            if (txtNome.getText().isBlank()) { alertErro("Informe o nome."); return; }
+            if (txtNome.getText().isBlank()) {
+                alertErro("Informe o nome.");
+                return;
+            }
             String cpfDigits = txtCpf.getText().replaceAll("\\D", "");
-            if (cpfDigits.length() != 11) { alertErro("CPF deve ter 11 dígitos numéricos."); return; }
+            if (cpfDigits.length() != 11) {
+                alertErro("CPF deve ter 11 dígitos numéricos.");
+                return;
+            }
 
             String telDigits = txtTelefone.getText().replaceAll("\\D", "");
             if (!telDigits.isBlank() && (telDigits.length() < 10 || telDigits.length() > 11)) {
-                alertErro("Telefone deve ter 10 ou 11 dígitos (DDD + número)."); return;
+                alertErro("Telefone deve ter 10 ou 11 dígitos (DDD + número).");
+                return;
             }
             if (chkDentista.isSelected()) {
-                if (txtCro.getText().isBlank()) { alertErro("Informe o CRO do dentista."); return; }
-                if (txtEspecialidade.getText().isBlank()) { alertErro("Informe a especialidade do dentista."); return; }
+                if (txtCro.getText().isBlank()) {
+                    alertErro("Informe o CRO do dentista.");
+                    return;
+                }
+                if (txtEspecialidade.getText().isBlank()) {
+                    alertErro("Informe a especialidade do dentista.");
+                    return;
+                }
             }
 
             // Monta objeto (novo ou edição)
             final boolean isEdicao = (pacienteEmEdicao != null);
             Pessoa p = isEdicao ? pacienteEmEdicao : new Pessoa();
 
-            p.nome      = txtNome.getText().trim();
-            p.cpf       = cpfDigits;
-            p.telefone  = telDigits;
-            p.email     = txtEmail.getText().trim();
-            p.dentista  = chkDentista.isSelected();
+            p.nome = txtNome.getText().trim();
+            p.cpf = cpfDigits;
+            p.telefone = telDigits;
+            p.email = txtEmail.getText().trim();
+            p.dentista = chkDentista.isSelected();
 
             LocalDate ld = dpNascimento.getValue();
-            p.dt_nascimento = (ld == null) ? null :
-                    Date.from(ld.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            p.dt_nascimento = (ld == null) ? null : Date.from(ld.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
             Dentista d = null;
             if (p.dentista) {
@@ -210,7 +246,8 @@ public class PacienteController {
 
             limparCampos();
             carregarTabela();
-            if (btnSalvar != null) btnSalvar.setText("Salvar");
+            if (btnSalvar != null)
+                btnSalvar.setText("Salvar");
             pacienteEmEdicao = null;
 
         } catch (SQLException e) {
@@ -219,11 +256,18 @@ public class PacienteController {
         }
     }
 
-    @FXML public void onLimpar() { limparCampos(); }
-    @FXML public void onListar() { carregarTabela(); }
+    @FXML
+    public void onLimpar() {
+        limparCampos();
+    }
+
+    @FXML
+    public void onListar() {
+        carregarTabela();
+    }
 
     // ============================================
-    //  Tabela: listar e configurar colunas
+    // Tabela: listar e configurar colunas
     // ============================================
     private void carregarTabela() {
         try {
@@ -244,9 +288,13 @@ public class PacienteController {
 
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         colNasc.setCellFactory(col -> new TableCell<>() {
-            @Override protected void updateItem(Date item, boolean empty) {
+            @Override
+            protected void updateItem(Date item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty || item == null) { setText(null); return; }
+                if (empty || item == null) {
+                    setText(null);
+                    return;
+                }
                 LocalDate ld = (item instanceof java.sql.Date)
                         ? ((java.sql.Date) item).toLocalDate()
                         : item.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -256,7 +304,7 @@ public class PacienteController {
     }
 
     // ============================================
-    //  UI Utils
+    // UI Utils
     // ============================================
     private void limparCampos() {
         txtNome.clear();
@@ -288,7 +336,7 @@ public class PacienteController {
      * Quando desmarcado, os nós "somem" do layout (managed=false).
      */
     private void configurarCamposDentista() {
-        for (Node n : new Node[]{ lblCro, txtCro, lblEsp, txtEspecialidade }) {
+        for (Node n : new Node[] { lblCro, txtCro, lblEsp, txtEspecialidade }) {
             n.managedProperty().bind(n.visibleProperty());
             n.visibleProperty().bind(chkDentista.selectedProperty());
         }
@@ -304,7 +352,8 @@ public class PacienteController {
         field.setTextFormatter(new TextFormatter<>(change -> {
             if (change.isAdded() || change.isReplaced() || change.isDeleted()) {
                 String digits = change.getControlNewText().replaceAll("\\D", "");
-                if (digits.length() > 11) return null;
+                if (digits.length() > 11)
+                    return null;
                 String formatted = formatCpf(digits);
                 change.setText(formatted);
                 change.setRange(0, change.getControlText().length());
@@ -320,7 +369,8 @@ public class PacienteController {
         field.setTextFormatter(new TextFormatter<>(change -> {
             if (change.isAdded() || change.isReplaced() || change.isDeleted()) {
                 String digits = change.getControlNewText().replaceAll("\\D", "");
-                if (digits.length() > 11) return null;
+                if (digits.length() > 11)
+                    return null;
                 String formatted = formatTelefone(digits);
                 change.setText(formatted);
                 change.setRange(0, change.getControlText().length());
@@ -335,11 +385,14 @@ public class PacienteController {
     // ========= Helpers de formatação =========
     private String formatCpf(String digits) {
         int n = digits.length();
-        if (n == 0) return "";
+        if (n == 0)
+            return "";
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < n; i++) {
-            if (i == 3 || i == 6) sb.append('.');
-            if (i == 9) sb.append('-');
+            if (i == 3 || i == 6)
+                sb.append('.');
+            if (i == 9)
+                sb.append('-');
             sb.append(digits.charAt(i));
         }
         return sb.toString();
@@ -347,17 +400,21 @@ public class PacienteController {
 
     private String formatTelefone(String digits) {
         int n = digits.length();
-        if (n == 0) return "";
+        if (n == 0)
+            return "";
         StringBuilder sb = new StringBuilder();
         if (n >= 1) {
             sb.append('(').append(digits.charAt(0));
-            if (n >= 2) sb.append(digits.charAt(1)).append(") ");
+            if (n >= 2)
+                sb.append(digits.charAt(1)).append(") ");
         }
-        if (n <= 2) return sb.toString().trim();
+        if (n <= 2)
+            return sb.toString().trim();
         String meio = digits.substring(2);
         if (meio.length() <= 8) {
             sb.append(meio, 0, Math.min(4, meio.length()));
-            if (meio.length() > 4) sb.append('-').append(meio.substring(4));
+            if (meio.length() > 4)
+                sb.append('-').append(meio.substring(4));
         } else {
             sb.append(meio, 0, 5).append('-').append(meio.substring(5));
         }
@@ -367,25 +424,37 @@ public class PacienteController {
     // ========= Máscara na exibição da tabela =========
     private void configurarCelulasTabela() {
         colCpf.setCellFactory(col -> new TableCell<>() {
-            @Override protected void updateItem(String item, boolean empty) {
+            @Override
+            protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty || item == null || item.isBlank()) { setText(null); return; }
+                if (empty || item == null || item.isBlank()) {
+                    setText(null);
+                    return;
+                }
                 String digits = item.replaceAll("\\D", "");
                 setText(digits.length() == 11
-                        ? digits.substring(0,3)+"."+digits.substring(3,6)+"."+digits.substring(6,9)+"-"+digits.substring(9)
+                        ? digits.substring(0, 3) + "." + digits.substring(3, 6) + "." + digits.substring(6, 9) + "-"
+                                + digits.substring(9)
                         : item);
             }
         });
 
         colTel.setCellFactory(col -> new TableCell<>() {
-            @Override protected void updateItem(String item, boolean empty) {
+            @Override
+            protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty || item == null || item.isBlank()) { setText(null); return; }
+                if (empty || item == null || item.isBlank()) {
+                    setText(null);
+                    return;
+                }
                 String d = item.replaceAll("\\D", "");
-                if (d.length() < 10) { setText(item); return; }
+                if (d.length() < 10) {
+                    setText(item);
+                    return;
+                }
                 String fmt = (d.length() == 11)
-                        ? String.format("(%s) %s-%s", d.substring(0,2), d.substring(2,7), d.substring(7))
-                        : String.format("(%s) %s-%s", d.substring(0,2), d.substring(2,6), d.substring(6));
+                        ? String.format("(%s) %s-%s", d.substring(0, 2), d.substring(2, 7), d.substring(7))
+                        : String.format("(%s) %s-%s", d.substring(0, 2), d.substring(2, 6), d.substring(6));
                 setText(fmt);
             }
         });

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.LoginController">
+
+    <center>
+        <VBox alignment="CENTER" spacing="10" BorderPane.alignment="CENTER">
+            <children>
+                <Label text="Login do Dentista" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+
+                <Label text="Nome:"/>
+                <TextField fx:id="txtNome" prefWidth="220"/>
+
+                <Button text="Entrar" onAction="#onLogin" prefWidth="120"/>
+
+                <Label fx:id="lblMensagem"
+                       textFill="red"
+                       wrapText="true"
+                       maxWidth="260"
+                       text=""/>
+            </children>
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+        </VBox>
+    </center>
+
+</BorderPane>

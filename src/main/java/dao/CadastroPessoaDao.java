@@ -1,4 +1,5 @@
 package dao;
+
 import model.Dentista;
 import model.Pessoa;
 import java.sql.*;
@@ -6,20 +7,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CadastroPessoaDao {
+    private static final int LIMITE_DENTISTAS_LOGADOS = 2;
 
     public List<Dentista> listarDentista() throws SQLException {
         List<Dentista> lista = new ArrayList<>();
 
         String sql = """
-        SELECT de.ID_DENTISTA, pe.NOME
-        FROM TB_DENTISTA de
-        INNER JOIN TB_PESSOA pe ON de.ID_DENTISTA = pe.ID_PESSOA
-        ORDER BY pe.NOME
-        """;
+                SELECT de.ID_DENTISTA, pe.NOME
+                FROM TB_DENTISTA de
+                INNER JOIN TB_PESSOA pe ON de.ID_DENTISTA = pe.ID_PESSOA
+                ORDER BY pe.NOME
+                """;
 
         try (Connection conn = Conexao.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
                 Dentista d = new Dentista();
@@ -36,15 +38,15 @@ public class CadastroPessoaDao {
         List<Pessoa> lista = new ArrayList<>();
 
         String sql = """
-        SELECT pa.ID_PACIENTE, pe.NOME
-        FROM TB_PACIENTE pa
-        INNER JOIN TB_PESSOA pe ON pa.ID_PACIENTE = pe.ID_PESSOA
-        ORDER BY pe.NOME
-        """;
+                SELECT pa.ID_PACIENTE, pe.NOME
+                FROM TB_PACIENTE pa
+                INNER JOIN TB_PESSOA pe ON pa.ID_PACIENTE = pe.ID_PESSOA
+                ORDER BY pe.NOME
+                """;
 
         try (Connection conn = Conexao.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
                 Pessoa p = new Pessoa();
@@ -62,8 +64,8 @@ public class CadastroPessoaDao {
     public Integer ultimocadastro() throws SQLException {
         String sql = "SELECT ID_PESSOA FROM TB_PESSOA ORDER BY ID_PESSOA DESC LIMIT 1";
         try (Connection conn = Conexao.getConnection();
-             Statement st = conn.createStatement();
-             ResultSet rs = st.executeQuery(sql)) {
+                Statement st = conn.createStatement();
+                ResultSet rs = st.executeQuery(sql)) {
             if (rs.next()) {
                 id_pessoa = rs.getInt("ID_PESSOA");
                 return id_pessoa;
@@ -77,8 +79,8 @@ public class CadastroPessoaDao {
         String sql = "SELECT ID_PESSOA, NOME, CPF, TELEFONE, EMAIL, DT_NASCIMENTO FROM TB_PESSOA ORDER BY ID_PESSOA";
 
         try (Connection conn = Conexao.getConnection();
-             Statement st = conn.createStatement();
-             ResultSet rs = st.executeQuery(sql)) {
+                Statement st = conn.createStatement();
+                ResultSet rs = st.executeQuery(sql)) {
 
             while (rs.next()) {
                 Pessoa p = new Pessoa();
@@ -94,10 +96,8 @@ public class CadastroPessoaDao {
         return lista;
     }
 
-
-
     public long inserirPessoa(Pessoa pessoa, Dentista dentista) throws SQLException {
-        final String sqlPessoa   = "INSERT INTO TB_PESSOA (NOME, CPF, TELEFONE, EMAIL, DT_NASCIMENTO) VALUES (?,?,?,?,?)";
+        final String sqlPessoa = "INSERT INTO TB_PESSOA (NOME, CPF, TELEFONE, EMAIL, DT_NASCIMENTO) VALUES (?,?,?,?,?)";
         final String sqlDentista = "INSERT INTO TB_DENTISTA (ID_DENTISTA, CRO, ESPECIALIDADE) VALUES (?,?,?)";
         final String sqlPaciente = "INSERT INTO TB_PACIENTE (ID_PACIENTE) VALUES (?)";
 
@@ -108,8 +108,8 @@ public class CadastroPessoaDao {
             long novoId;
             try (PreparedStatement ps = conn.prepareStatement(sqlPessoa, Statement.RETURN_GENERATED_KEYS)) {
                 ps.setString(1, pessoa.nome);
-                ps.setString(2, pessoa.cpf);        // <<<< CPF como String
-                ps.setString(3, pessoa.telefone);   // <<<< Telefone como String
+                ps.setString(2, pessoa.cpf); // <<<< CPF como String
+                ps.setString(3, pessoa.telefone); // <<<< Telefone como String
                 ps.setString(4, pessoa.email);
 
                 if (pessoa.dt_nascimento != null) {
@@ -121,22 +121,24 @@ public class CadastroPessoaDao {
                 ps.executeUpdate();
 
                 try (ResultSet keys = ps.getGeneratedKeys()) {
-                    if (!keys.next()) throw new SQLException("Falha ao obter ID gerado para TB_PESSOA.");
+                    if (!keys.next())
+                        throw new SQLException("Falha ao obter ID gerado para TB_PESSOA.");
                     novoId = keys.getLong(1); // use long para BIGINT/IDENTITY
                 }
             }
 
             if (pessoa.dentista) {
-                if (dentista == null) throw new SQLException("Dados de dentista ausentes.");
+                if (dentista == null)
+                    throw new SQLException("Dados de dentista ausentes.");
                 try (PreparedStatement ps = conn.prepareStatement(sqlDentista)) {
-                    ps.setLong(1, novoId);                 // FK = pessoa.id
+                    ps.setLong(1, novoId); // FK = pessoa.id
                     ps.setString(2, dentista.cro);
                     ps.setString(3, dentista.especialidade);
                     ps.executeUpdate();
                 }
             } else {
                 try (PreparedStatement ps = conn.prepareStatement(sqlPaciente)) {
-                    ps.setLong(1, novoId);                 // FK = pessoa.id
+                    ps.setLong(1, novoId); // FK = pessoa.id
                     ps.executeUpdate();
                 }
             }
@@ -144,11 +146,20 @@ public class CadastroPessoaDao {
             conn.commit();
             return novoId;
         } catch (SQLException e) {
-            try { conn.rollback(); } catch (SQLException ignore) {}
+            try {
+                conn.rollback();
+            } catch (SQLException ignore) {
+            }
             throw e;
         } finally {
-            try { conn.setAutoCommit(true); } catch (SQLException ignore) {}
-            try { conn.close(); } catch (SQLException ignore) {}
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException ignore) {
+            }
+            try {
+                conn.close();
+            } catch (SQLException ignore) {
+            }
         }
     }
 
@@ -175,7 +186,10 @@ public class CadastroPessoaDao {
         } catch (SQLException e) {
             throw new SQLException("Erro ao buscar dentista por pessoaId: " + e.getMessage(), e);
         } finally {
-            try { conn.close(); } catch (SQLException ignore) {}
+            try {
+                conn.close();
+            } catch (SQLException ignore) {
+            }
         }
     }
 
@@ -193,20 +207,22 @@ public class CadastroPessoaDao {
         } catch (SQLException e) {
             throw new SQLException("Erro ao excluir pessoa: " + e.getMessage(), e);
         } finally {
-            try { conn.close(); } catch (SQLException ignore) {}
+            try {
+                conn.close();
+            } catch (SQLException ignore) {
+            }
         }
     }
 
     public void atualizarPessoa(Pessoa p) throws SQLException {
-        final String sql =
-                "UPDATE TB_PESSOA " +
-                        "   SET NOME = ?, CPF = ?, TELEFONE = ?, EMAIL = ?, DT_NASCIMENTO = ? " +
-                        " WHERE ID_PESSOA = ?";
+        final String sql = "UPDATE TB_PESSOA " +
+                "   SET NOME = ?, CPF = ?, TELEFONE = ?, EMAIL = ?, DT_NASCIMENTO = ? " +
+                " WHERE ID_PESSOA = ?";
 
         try (Connection conn = Conexao.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setString(1, p.nome);         // recomendo CPF/telefone como String
+            ps.setString(1, p.nome); // recomendo CPF/telefone como String
             ps.setString(2, p.cpf);
             ps.setString(3, p.telefone);
             ps.setString(4, p.email);
@@ -217,7 +233,7 @@ public class CadastroPessoaDao {
                 ps.setNull(5, java.sql.Types.DATE);
             }
 
-            ps.setInt(6, p.id_pessoa);       // ID (PK) da pessoa
+            ps.setInt(6, p.id_pessoa); // ID (PK) da pessoa
 
             int linhas = ps.executeUpdate();
             if (linhas == 0) {
@@ -238,7 +254,7 @@ public class CadastroPessoaDao {
         if (d == null) {
             final String sqlDel = "DELETE FROM TB_DENTISTA WHERE ID_DENTISTA = ?";
             try (Connection conn = Conexao.getConnection();
-                 PreparedStatement ps = conn.prepareStatement(sqlDel)) {
+                    PreparedStatement ps = conn.prepareStatement(sqlDel)) {
                 ps.setInt(1, pessoaId);
                 ps.executeUpdate(); // ok se 0 linhas (não existia)
             }
@@ -266,7 +282,7 @@ public class CadastroPessoaDao {
 
             if (linhas == 0) {
                 try (PreparedStatement ins = conn.prepareStatement(sqlIns)) {
-                    ins.setInt(1, pessoaId);   // PK = FK para TB_PESSOA(ID)
+                    ins.setInt(1, pessoaId); // PK = FK para TB_PESSOA(ID)
                     ins.setString(2, cro);
                     ins.setString(3, esp);
                     ins.executeUpdate();
@@ -275,13 +291,138 @@ public class CadastroPessoaDao {
 
             conn.commit();
         } catch (SQLException e) {
-            try { conn.rollback(); } catch (SQLException ignore) {}
+            try {
+                conn.rollback();
+            } catch (SQLException ignore) {
+            }
             throw new SQLException("Erro no upsert de dentista: " + e.getMessage(), e);
         } finally {
-            try { conn.setAutoCommit(true); } catch (SQLException ignore) {}
-            try { conn.close(); } catch (SQLException ignore) {}
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException ignore) {
+            }
+            try {
+                conn.close();
+            } catch (SQLException ignore) {
+            }
         }
     }
 
+    /**
+     * Login básico usando o NOME.
+     * - Confere se existe pessoa + dentista com esse nome.
+     * - Verifica se já existem 2 dentistas logados.
+     * - Se puder logar, grava uma linha em TB_LOGIN_DENTISTA com ATIVO = 1.
+     * - Retorna o Dentista logado.
+     * 
+     * @throws IllegalStateException se já houver 2 dentistas logados.
+     * @throws SQLException          em erro de banco ou se não for dentista.
+     */
+    public Dentista loginDentistaPorNome(String nome) throws SQLException {
+        final String sqlBuscaDentista = """
+                SELECT d.ID_DENTISTA, p.NOME, d.CRO, d.ESPECIALIDADE
+                FROM TB_DENTISTA d
+                INNER JOIN TB_PESSOA p ON d.ID_DENTISTA = p.ID_PESSOA
+                WHERE p.NOME = ?
+                """;
+
+        final String sqlInsereLogin = """
+                INSERT INTO TB_LOGIN_DENTISTA (ID_DENTISTA, ATIVO)
+                VALUES (?, 1)
+                """;
+
+        Connection conn = Conexao.getConnection();
+        try {
+            conn.setAutoCommit(false);
+
+            // 1) Verifica quantidade de dentistas logados
+            int qtdLogados = qtdDentistasLogados(conn);
+            if (qtdLogados >= LIMITE_DENTISTAS_LOGADOS) {
+                throw new IllegalStateException(
+                        "Já existem " + LIMITE_DENTISTAS_LOGADOS + " dentistas logados. Aguarde alguém sair.");
+            }
+
+            // 2) Busca dentista pelo nome
+            Dentista dentista = null;
+            try (PreparedStatement ps = conn.prepareStatement(sqlBuscaDentista)) {
+                ps.setString(1, nome);
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        dentista = new Dentista();
+                        dentista.setId_dentista(rs.getInt("ID_DENTISTA"));
+                        dentista.setNome(rs.getString("NOME"));
+                        dentista.setCro(rs.getString("CRO"));
+                        dentista.setEspecialidade(rs.getString("ESPECIALIDADE"));
+                    }
+                }
+            }
+
+            if (dentista == null) {
+                throw new SQLException("Nome não encontrado ou não cadastrado como dentista.");
+            }
+
+            // 3) Registra login na tabela de sessões
+            try (PreparedStatement ps = conn.prepareStatement(sqlInsereLogin)) {
+                ps.setInt(1, dentista.getId_dentista());
+                ps.executeUpdate();
+            }
+
+            conn.commit();
+            return dentista;
+        } catch (SQLException | IllegalStateException e) {
+            try {
+                conn.rollback();
+            } catch (SQLException ignore) {
+            }
+            throw e;
+        } finally {
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException ignore) {
+            }
+            try {
+                conn.close();
+            } catch (SQLException ignore) {
+            }
+        }
+    }
+
+    /**
+     * Faz logout do dentista, encerrando todas as sessões ativas dele.
+     */
+    public void logoutDentista(int idDentista) throws SQLException {
+        final String sql = """
+                UPDATE TB_LOGIN_DENTISTA
+                   SET ATIVO = 0
+                 WHERE ID_DENTISTA = ?
+                   AND ATIVO = 1
+                """;
+
+        try (Connection conn = Conexao.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idDentista);
+            ps.executeUpdate();
+        }
+    }
+
+    /**
+     * Conta quantos dentistas distintos estão logados (ATIVO = 1).
+     * Usado internamente pelo método de login.
+     */
+    private int qtdDentistasLogados(Connection conn) throws SQLException {
+        final String sql = """
+                SELECT COUNT(DISTINCT ID_DENTISTA) AS QTD
+                  FROM TB_LOGIN_DENTISTA
+                 WHERE ATIVO = 1
+                """;
+
+        try (Statement st = conn.createStatement();
+                ResultSet rs = st.executeQuery(sql)) {
+            if (rs.next()) {
+                return rs.getInt("QTD");
+            }
+        }
+        return 0;
+    }
 
 }
